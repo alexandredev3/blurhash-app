@@ -3,12 +3,6 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { apiService } from '../services/api';
 
-type Data = {
-  id: string;
-  image_url: string;
-  hash: string;
-}
-
 interface IApiProvider {
   children: ReactNode;
 }

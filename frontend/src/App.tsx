@@ -5,6 +5,8 @@ import { Image } from './components/Image';
 import loadingPaperplane from './assets/animations/loading-paperplane.json';
 import { useApi } from './hooks/ApiContext';
 
+import './App.css';
+
 type Data = {
   id: string;
   image_url: string;
@@ -42,7 +44,7 @@ function App() {
     const files = event.target.files;
     
     if (!files) {
-      return alert("Selecione uma Imagem!");
+      return;
     }
 
     const images = [...files];
@@ -93,13 +95,15 @@ function App() {
             />
           </div>
         ) : (
-          <>
+          <div className="images__container">
             {
               data.map((image: Data) => {
-                return <Image src={image} />
+                return (
+                  <Image key={image.id} src={image} />
+                )
               })
             }
-          </>
+          </div>
         )
       }
     </div>

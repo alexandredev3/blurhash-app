@@ -17,30 +17,29 @@ export function Image({ src }: Props) {
 
   return (
     <div className="content">
-      <div key={src.id}>
-        {
-          imageIsLoaded && (
-            <Blurhash
-              className="blurhash"
-              data-status={imageIsLoaded ? 'loading' : 'loaded'}
-              hash={src.hash}
-              width={width}
-              height={height}
-              resolutionX={32}
-              resolutionY={32}
-              punch={1}
-            />
-          )
-        }
-        <img
-          style={{ display: imageIsLoaded ? 'none' : 'unset' }}
-          src={src.image_url}
-          onLoad={() => setImageIsLoaded(false)}
-          alt="Imagem"
-          width={width}
-          height={height}
-        />
-      </div>
+      {
+        imageIsLoaded && (
+          <Blurhash
+            className="blurhash"
+            hash={src.hash}
+            width={width}
+            height={height}
+            resolutionX={32}
+            resolutionY={32}
+            punch={1}
+          />
+        )
+      }
+
+      <img
+        className="imagem"
+        style={{ display: imageIsLoaded ? 'none' : 'unset' }}
+        src={src.image_url}
+        onLoad={() => setImageIsLoaded(false)}
+        alt="Imagem"
+        width={width}
+        height={height}
+      />
     </div>
   );
 }

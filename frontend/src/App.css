@@ -1,0 +1,9 @@
+.images__container {
+  max-width: 400px;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-top: 14px;
+  gap: 12px;
+}
