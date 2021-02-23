@@ -6,20 +6,21 @@ import { createImageService } from '../services/createImageService';
 import { getImagesService } from '../services/getImagesService';
 
 export const ImageController = {
-  index: async (
-    request: Request,
-    response: Response
-  ): Promise<Response<Image[]>> => {
+  index: async (request: Request, response: Response) => {
     const images = await getImagesService();
 
     return response.status(200).json(classToClass(images));
   },
 
-  create: async (request: Request, response: Response): Promise<void> => {
+  create: async (request: Request, response: Response) => {
     const file = request.file;
 
-    await createImageService(file);
+    try {
+      await createImageService(file);
+    } catch (err) {
+      return response.status(400).json('');
+    }
 
-    response.status(204).send();
+    return response.status(204).send();
   },
 };

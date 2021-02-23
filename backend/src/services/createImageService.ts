@@ -14,7 +14,7 @@ const encodeImageToBlurHash = (
   buffer: Buffer,
   width: number,
   height: number
-): string => {
+) => {
   const hash = encode(new Uint8ClampedArray(buffer), width, height, 4, 4);
 
   return hash;
