@@ -1,7 +1,14 @@
 import sharp from 'sharp';
 import { encode } from 'blurhash';
+import axios from 'axios';
+
 import { getRepository } from 'typeorm';
 import { Image } from '../entities/Image';
+import { APP_URL } from '../utils/environment';
+
+const api = axios.create({
+  baseURL: APP_URL,
+});
 
 const encodeImageToBlurHash = (
   buffer: Buffer,
@@ -14,8 +21,13 @@ const encodeImageToBlurHash = (
 };
 
 const getImageHash = async (path: string): Promise<string> => {
+  const { data } = await api({
+    url: `/uploads/${path}`,
+    responseType: 'arraybuffer',
+  });
+
   return new Promise((resolve, reject) => {
-    sharp(path)
+    sharp(data)
       .raw()
       .ensureAlpha()
       .resize({ width: 300, height: 300, fit: 'inside' })
@@ -32,15 +44,11 @@ const getImageHash = async (path: string): Promise<string> => {
 };
 
 const createImageService = async (file: Express.Multer.File): Promise<void> => {
-  const { filename, path } = file;
+  const { filename } = file;
 
   const imageRepository = getRepository(Image);
 
-  /**
-   * if using the server URL will not work, we need to use the entire directory of our project.
-   * e.g. /home/user/blurhash/backend/uploads/filename.png;
-   */
-  await getImageHash(path)
+  await getImageHash(filename)
     .then(async (hash) => {
       const image = imageRepository.create({
         path: filename,
