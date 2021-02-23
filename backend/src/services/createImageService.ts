@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm';
 import { Image } from '../entities/Image';
 import { APP_URL } from '../utils/environment';
 
-const api = axios.create({
+const request = axios.create({
   baseURL: APP_URL,
 });
 
@@ -21,7 +21,7 @@ const encodeImageToBlurHash = (
 };
 
 const getImageHash = async (path: string): Promise<string> => {
-  const { data } = await api({
+  const { data } = await request({
     url: `/uploads/${path}`,
     responseType: 'arraybuffer',
   });
