@@ -13,7 +13,7 @@ const encodeImageToBlurHash = (
   return hash;
 };
 
-const getImageHash = async (path: string): Promise<string | Error> => {
+const getImageHash = async (path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     sharp(path)
       .raw()
@@ -32,28 +32,26 @@ const getImageHash = async (path: string): Promise<string | Error> => {
 };
 
 const createImageService = async (file: Express.Multer.File): Promise<void> => {
-  const { filename } = file;
+  const { filename, path } = file;
 
   const imageRepository = getRepository(Image);
 
   /**
    * if using the server URL will not work, we need to use the entire directory of our project.
-   * e.g. /home/user/blurhash/backend/temp/uploads/filename.png;
+   * e.g. /home/user/blurhash/backend/uploads/filename.png;
    */
-  const hash = await getImageHash(`${process.cwd()}/uploads/${filename}`)
-    .then((hash) => {
-      return hash as string;
+  await getImageHash(path)
+    .then(async (hash) => {
+      const image = imageRepository.create({
+        path: filename,
+        hash,
+      });
+
+      await imageRepository.save(image);
     })
     .catch((err: Error) => {
       throw new Error(err.message);
     });
-
-  const image = imageRepository.create({
-    path: filename,
-    hash,
-  });
-
-  await imageRepository.save(image);
 };
 
 export { createImageService };
