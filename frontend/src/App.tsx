@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 import { Image } from './components/Image';
-import loadingPaperplane from './assets/animations/loading-paperplane.json';
 import { apiService } from './services/api';
 
 import './App.css';
@@ -14,14 +13,12 @@ type Data = {
 
 function App() {
   const [data, setData] = useState<Data[]>([]);
-  const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<File[]>([]);
 
   useEffect(() => {
     apiService.get('/images').then((response) => {
       const { data } = response;
 
-      setLoading(false);
       return setData(data);
     }).catch(() => {
       return;
