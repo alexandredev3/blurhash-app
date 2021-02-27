@@ -1,9 +1,8 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import Lottie, { Options } from 'react-lottie';
 
 import { Image } from './components/Image';
 import loadingPaperplane from './assets/animations/loading-paperplane.json';
-import { useApi } from './hooks/ApiContext';
+import { apiService } from './services/api';
 
 import './App.css';
 
@@ -14,23 +13,12 @@ type Data = {
 }
 
 function App() {
-  const { api } = useApi();
-
   const [data, setData] = useState<Data[]>([]);
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<File[]>([]);
 
-  const loadingOptions: Options = {
-    loop: true,
-    autoplay: true,
-    animationData: loadingPaperplane,
-  }
-
   useEffect(() => {
-    api({
-      url: '/images',
-      method: 'GET'
-    }).then((response) => {
+    apiService.get('/images').then((response) => {
       const { data } = response;
 
       setLoading(false);
@@ -57,18 +45,20 @@ function App() {
 
     const data = new FormData();
 
+    if (!images) {
+      return alert('Selecione uma imagem!!');
+    }
+
     images.map((image) => {
       data.append('image', image);
     });
 
     try {
-      await api({
-        method: 'POST',
-        url: '/image',
-        data
-      });
+      await apiService.post('/image', data);
 
       alert("Imagem enviada com sucesso!");
+      
+      setImages([]);
     } catch(err) {
       alert(err);
     }
@@ -80,32 +70,19 @@ function App() {
         <input 
           type="file" 
           name="file" 
-          onChange={(event) => handleImage(event)} 
+          onChange={(event) => handleImage(event)}
         />
         <button>Enviar</button>
       </form>
-      {
-        loading ? (
-          <div className="loading__content">
-            <Lottie 
-              options={loadingOptions}
-              width={300}
-              height={300}
-              isClickToPauseDisabled={true}
-            />
-          </div>
-        ) : (
-          <div className="images__container">
-            {
-              data.map((image: Data) => {
-                return (
-                  <Image key={image.id} src={image} />
-                )
-              })
-            }
-          </div>
-        )
-      }
+      <div className="images__container">
+        {
+          data.map((image: Data) => {
+            return (
+              <Image key={image.id} src={image} />
+            )
+          })
+        }
+      </div>
     </div>
   );
 }

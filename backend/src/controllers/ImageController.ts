@@ -20,10 +20,10 @@ export const ImageController = {
 
     try {
       await createImageService(file);
+
+      return response.status(204).send();
     } catch (err) {
       return response.status(400).json('Unexpected error.');
     }
-
-    return response.status(204).send();
   },
 };
