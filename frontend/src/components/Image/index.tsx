@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function Image({ src }: Props) {
-  const [imageIsLoaded, setImageIsLoaded] = useState(true);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const width = 200;
   const height = 200;
@@ -18,7 +18,7 @@ export function Image({ src }: Props) {
   return (
     <div className="content">
       {
-        imageIsLoaded && (
+        isImageLoading && (
           <Blurhash
             className="blurhash"
             hash={src.hash}
@@ -33,9 +33,9 @@ export function Image({ src }: Props) {
 
       <img
         className="imagem"
-        style={{ display: imageIsLoaded ? 'none' : 'unset' }}
+        style={{ display: isImageLoading ? 'none' : 'unset' }}
         src={src.image_url}
-        onLoad={() => setImageIsLoaded(false)}
+        onLoad={() => setIsImageLoading(false)}
         alt="Imagem"
         width={width}
         height={height}
