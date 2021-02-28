@@ -11,7 +11,7 @@ export const ImageController = {
 
       return response.status(200).json(classToClass(images));
     } catch (err) {
-      return response.status(400).json('Unexpected error.');
+      return response.status(400).json({ error: 'Unexpected error.' });
     }
   },
 
@@ -23,7 +23,7 @@ export const ImageController = {
 
       return response.status(204).send();
     } catch (err) {
-      return response.status(400).json('Unexpected error.');
+      return response.status(400).json({ error: 'Unexpected error.' });
     }
   },
 };
