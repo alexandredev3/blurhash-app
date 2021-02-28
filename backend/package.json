@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsnd --transpile-only --ignore-watch node_modules ./src/app.ts",
+    "start": "node ./src/app.js",
+    "migrations:run": "typeorm migration:run",
     "typeorm": "tsnd node_modules/typeorm/cli.js --config ./ormconfig.ts"
   },
   "dependencies": {
